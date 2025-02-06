@@ -15,7 +15,7 @@ return new class extends Migration
          $table->foreignIdFor(OptionValue::class)->onDelete('cascade');
          $table->foreignIdFor(Product::class)->onDelete('cascade');
          $table->string('sign')->default('+');
-         $table->double('origin_price');
+         $table->double('origin_price')->nullable();
          $table->double('price');
          $table->timestamps();
       });

@@ -12,6 +12,7 @@ use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use SmartCms\Options\Models\Option;
 use SmartCms\Options\Models\OptionValue;
 use SmartCms\Store\Admin\Resources\ProductResource;
@@ -44,6 +45,16 @@ class EditOptions extends ManageRelatedRecords
 
     public function table(Table $table): Table
     {
+        $schema = [
+            ToggleButtons::make('sign')->options([
+                '+' => 'Plus',
+                '-' => 'Minus',
+            ])->inline()->default('+'),
+            TextInput::make('price')->default(0)->required()
+                ->numeric()->suffix(app('front_currency')->code ?? ''),
+
+        ];
+        Event::dispatch('cms.admin.option-value.create', [&$schema, $this->getOwnerRecord()]);
         return $table
             ->recordTitleAttribute('name')
             ->columns([
@@ -56,51 +67,27 @@ class EditOptions extends ManageRelatedRecords
             ->headerActions([
                 Tables\Actions\AttachAction::make()
                     ->label(_actions('add'))
-                    ->form(fn(AttachAction $action): array => [
-                        $action->getRecordSelect(),
-                        ToggleButtons::make('sign')->options([
-                            '+' => 'Plus',
-                            '-' => 'Minus',
-                        ])->inline()->default('+'),
-                        TextInput::make('origin_price')
-                            ->default(0)->required()
-                            ->numeric()->suffix(app('currency')->code ?? '')->live(debounce: 1000)->afterStateUpdated(function ($state, $set) {
-                                $set('price', Calculator::calculate($state));
-                            }),
-                        TextInput::make('price')->readOnly()->default(0)->required()
-                            ->numeric()->suffix(app('front_currency')->code ?? '')->live()
-                            ->disabled()
-                            ->hidden(function () {
-                                return app('front_currency')->id == app('currency')->id;
-                            }),
-                    ])->mutateFormDataUsing(function ($data) {
-                        $data['price'] = Calculator::calculate($data['origin_price']);
+                    ->form(function (AttachAction $action, $form) use ($schema) {
+                        return $form->schema([
+                            $action->getRecordSelect(),
+                            ...$schema
+                        ]);
+                    })->mutateFormDataUsing(function ($data) {
+                        Event::dispatch('cms.admin.option-value.mutate', [&$data, $this->getOwnerRecord()]);
+                        if (!isset($data['origin_price'])) {
+                            $data['origin_price'] = $data['price'];
+                        }
                         return $data;
                     })
                     ->preloadRecordSelect(),
             ])
             ->actions([
                 Tables\Actions\DetachAction::make()->label(_actions('delete')),
-                Tables\Actions\EditAction::make()->form([
-                    Hidden::make('option_value_id'),
-                    Hidden::make('product_id'),
-                    ToggleButtons::make('sign')->options([
-                        '+' => 'Plus',
-                        '-' => 'Minus',
-                    ])->inline()->default('+'),
-                    TextInput::make('origin_price')
-                        ->default(0)->required()
-                        ->numeric()->suffix(app('currency')->code ?? '')->live(debounce: 1000)->afterStateUpdated(function ($state, $set) {
-                            $set('price', Calculator::calculate($state));
-                        }),
-                    TextInput::make('price')->readOnly()->default(0)->required()
-                        ->numeric()->suffix(app('front_currency')->code ?? '')->live()
-                        ->disabled()
-                        ->hidden(function () {
-                            return app('front_currency')->id == app('currency')->id;
-                        }),
-                ])->action(function ($data) {
-                    $data['price'] = Calculator::calculate($data['origin_price']);
+                Tables\Actions\EditAction::make()->form($schema)->action(function ($data) {
+                    Event::dispatch('cms.admin.option-value.mutate', [&$data, $this->getOwnerRecord()]);
+                    if (!isset($data['origin_price'])) {
+                        $data['origin_price'] = $data['price'];
+                    }
                     DB::table(sconfig('database_table_prefix', 'smart_cms_') . 'product_options')->where('option_value_id', $data['option_value_id'])->where('product_id', $data['product_id'])->update([
                         'sign' => $data['sign'],
                         'origin_price' => $data['origin_price'],

@@ -9,7 +9,6 @@ use SmartCms\Options\Admin\Actions\Navigation\ProductSubNavigation;
 use SmartCms\Options\Admin\Actions\Navigation\Resources;
 use SmartCms\Options\Events\CartItemTransform;
 use SmartCms\Options\Events\CartProductCalculate;
-use SmartCms\Options\Events\CurrencyChanged;
 use SmartCms\Options\Events\ProductEntityTransform;
 use SmartCms\Options\Events\ProductPrice;
 use SmartCms\Options\Models\Option;
@@ -28,7 +27,6 @@ class OptionServiceProvider  extends ServiceProvider
       Event::listen('cms.product.calculate-price', ProductPrice::class);
       Event::listen('cms.cart-item.transform', CartItemTransform::class);
       Event::listen('cms.product.cart.calculate', CartProductCalculate::class);
-      Event::listen('cms.currency.changed', CurrencyChanged::class);
    }
 
    public function boot()
