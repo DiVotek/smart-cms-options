@@ -17,13 +17,10 @@ class ListOptions extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make(_hints('help'))
-                ->iconButton()
-                ->icon('heroicon-o-question-mark-circle')
-                ->modalDescription(_hints('help.option'))
-                ->modalFooterActions([]),
+            Actions\Action::make('help')
+                ->help('help.option'),
             Actions\Action::make('create')
-                ->label(_actions('create'))
+                ->create()
                 ->form(function (Form $form) {
                     return $form->schema([
                         Schema::getName(),
