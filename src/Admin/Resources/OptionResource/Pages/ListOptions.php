@@ -14,6 +14,15 @@ class ListOptions extends ListRecords
 {
     protected static string $resource = OptionResource::class;
 
+    public function getBreadcrumbs(): array
+    {
+        if (config('shared.admin.breadcrumbs', false)) {
+            return parent::getBreadcrumbs();
+        }
+
+        return [];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
