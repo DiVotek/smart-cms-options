@@ -11,8 +11,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use SmartCms\Core\Services\Schema;
 use SmartCms\Core\Services\TableSchema;
 use SmartCms\Options\Admin\Resources\OptionResource;
-use SmartCms\Options\Models\OptionValue as ModelsOptionValue;
-use SmartCms\Store\Models\OptionValue;
+use SmartCms\Options\Models\OptionValue;
 
 class EditValues extends ManageRelatedRecords
 {
@@ -63,14 +62,15 @@ class EditValues extends ManageRelatedRecords
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()->using(function (array $data) {
-                    $data['option_id'] = $this->record->id;
-                    $record = ModelsOptionValue::query()->create($data);
-                    return $record;
-                    return [
-                        'option_id' => $this->record->id,
-                    ];
-                }),
+                Tables\Actions\CreateAction::make()
+                    ->using(function (array $data) {
+                        $data['option_id'] = $this->record->id;
+                        $record = OptionValue::query()->create($data);
+                        return $record;
+                        return [
+                            'option_id' => $this->record->id,
+                        ];
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->form(function ($form, $record) {
