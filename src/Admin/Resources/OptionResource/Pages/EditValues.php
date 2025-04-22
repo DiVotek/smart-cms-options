@@ -38,13 +38,11 @@ class EditValues extends ManageRelatedRecords
     {
         return $form
             ->schema([
-                Section::make('')->schema([
-                    Schema::getName(),
-                    Schema::getStatus(),
-                    Schema::getSorting(),
-                    Schema::getImage(name: 'image'),
-                ]),
-            ]);
+                Schema::getName(),
+                Schema::getStatus(),
+                Schema::getSorting(),
+                Schema::getImage(name: 'image'),
+            ])->columns(1);
     }
 
     public function table(Table $table): Table
@@ -58,9 +56,6 @@ class EditValues extends ManageRelatedRecords
                 TableSchema::getUpdatedAt(),
             ])
             ->reorderable('sorting')
-            ->filters([
-                //
-            ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->using(function (array $data) {
@@ -74,7 +69,6 @@ class EditValues extends ManageRelatedRecords
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->form(function ($form, $record) {
-                    // dd($record);
                     return $form->schema([
                         Section::make('')->schema([
                             Schema::getName(),

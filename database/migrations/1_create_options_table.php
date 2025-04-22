@@ -12,11 +12,13 @@ return new class extends Migration
         Schema::create(Option::getDb(), function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('status')->default(true);
-            $table->integer('sorting')->default(0);
+            $table->boolean('status')->default(true)->index();
+            $table->integer('sorting')->default(0)->index();
             $table->boolean('required')->default(false);
             $table->unsignedBigInteger('default_value')->nullable();
             $table->timestamps();
+
+            $table->index(['status', 'sorting']);
         });
     }
 

@@ -12,12 +12,14 @@ return new class extends Migration
     {
         Schema::create(OptionValue::getDb(), function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Option::class)->onDelete('cascade');
+            $table->foreignId('option_id')->constrained(Option::getDb())->onDelete('cascade');
             $table->string('name');
-            $table->boolean('status')->default(true);
-            $table->integer('sorting')->default(0);
+            $table->boolean('status')->default(true)->index();
+            $table->integer('sorting')->default(0)->index();
             $table->string('image')->nullable();
             $table->timestamps();
+
+            $table->index(['status', 'sorting']);
         });
     }
 

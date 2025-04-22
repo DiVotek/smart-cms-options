@@ -13,13 +13,7 @@ class Option extends BaseModel
     use HasStatus;
     use HasTranslate;
 
-    protected $fillable = [
-        'name',
-        'status',
-        'sorting',
-        'required',
-        'default_value',
-    ];
+    protected $guarded = [];
 
     public function values()
     {

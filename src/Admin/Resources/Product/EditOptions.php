@@ -18,6 +18,7 @@ use SmartCms\Options\Models\OptionValue;
 use SmartCms\Store\Admin\Resources\ProductResource;
 use SmartCms\Store\Admin\Resources\ProductResource\Pages\ListProducts;
 use SmartCms\Store\Models\CartItem;
+use SmartCms\Store\Models\Product;
 use SmartCms\Store\Services\Calculator;
 use SmartCms\Store\Services\CartService;
 use SmartCms\Store\Services\TableSchema;
@@ -28,9 +29,16 @@ class EditOptions extends ManageRelatedRecords
 
     protected static string $relationship = 'optionValues';
 
+    public static function getNavigationBadge(): ?string
+    {
+        $pageId = request()->route('record', 0);
+
+        return Product::query()->withoutGlobalScopes()->find($pageId)?->optionValues()->count() ?? 0;
+    }
+
     public static function getNavigationLabel(): string
     {
-        return _nav('options');
+        return __('options::trans.nav');
     }
 
     public static function getNavigationIcon(): string|Htmlable|null

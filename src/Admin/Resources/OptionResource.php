@@ -23,6 +23,8 @@ class OptionResource extends Resource
 {
     protected static ?string $model = Option::class;
 
+    protected static ?int $navigationSort = 6;
+
     public static function getNavigationGroup(): ?string
     {
         return _nav('catalog');
@@ -35,12 +37,12 @@ class OptionResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return _nav('option');
+        return __('options::trans.nav');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return _nav('options');
+        return __('options::trans.nav_plural');
     }
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder

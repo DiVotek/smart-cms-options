@@ -1,76 +1,82 @@
 {
-   "name": "smart-cms/options",
-   "description": "Smart CMS options package for store",
-   "keywords": [
-      "smart_cms",
-      "laravel",
-      "store",
-      "options"
-   ],
-   "homepage": "https://github.com/smart-cms/store",
-   "license": "MIT",
-   "authors": [
-      {
-         "name": "smart-cms",
-         "email": "support@divotek.com",
-         "role": "Developer"
-      }
-   ],
-   "require": {
-      "smart-cms/store": "*"
-   },
-   "require-dev": {
-      "laravel/pint": "^1.14",
-      "nunomaduro/collision": "^8.1.1||^7.10.0",
-      "orchestra/testbench": "^9.0.0||^8.22.0",
-      "pestphp/pest": "^2.34",
-      "pestphp/pest-plugin-arch": "^2.7",
-      "pestphp/pest-plugin-laravel": "^2.3"
-   },
-   "autoload": {
-      "psr-4": {
-         "SmartCms\\Options\\": "src/"
-      }
-   },
-   "autoload-dev": {
-      "psr-4": {
-         "SmartCms\\Options\\Tests\\": "tests/",
-         "Workbench\\App\\": "workbench/app/"
-      }
-   },
-   "scripts": {
-      "post-autoload-dump": "@composer run prepare",
-      "clear": "@php vendor/bin/testbench package:purge-store --ansi",
-      "prepare": "@php vendor/bin/testbench package:discover --ansi",
-      "build": [
-         "@composer run prepare",
-         "@php vendor/bin/testbench workbench:build --ansi"
-      ],
-      "start": [
-         "Composer\\Config::disableProcessTimeout",
-         "@composer run build",
-         "@php vendor/bin/testbench serve"
-      ],
-      "analyse": "vendor/bin/phpstan analyse",
-      "test": "vendor/bin/pest",
-      "test-coverage": "vendor/bin/pest --coverage",
-      "format": "vendor/bin/pint"
-   },
-   "config": {
-      "sort-packages": true,
-      "allow-plugins": {
-         "pestphp/pest-plugin": true,
-         "phpstan/extension-installer": true,
-         "dealerdirect/phpcodesniffer-composer-installer": true
-      }
-   },
-   "extra": {
-      "laravel": {
-         "providers": [
-            "SmartCms\\Options\\OptionServiceProvider"
-         ]
-      }
-   },
-   "minimum-stability": "dev",
-   "prefer-stable": true
+    "name": "smart-cms/options",
+    "description": "Smart CMS options package for store",
+    "keywords": [
+        "smart_cms",
+        "laravel",
+        "store",
+        "options"
+    ],
+    "homepage": "https://github.com/smart-cms/store",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "smart-cms",
+            "email": "support@divotek.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "smart-cms/store": "dev-refactor"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.14",
+        "nunomaduro/collision": "^8.1.1||^7.10.0",
+        "orchestra/testbench": "^9.0.0||^8.22.0",
+        "pestphp/pest": "^2.34",
+        "pestphp/pest-plugin-arch": "^2.7",
+        "pestphp/pest-plugin-laravel": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "SmartCms\\Options\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SmartCms\\Options\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@composer run prepare",
+        "clear": "@php vendor/bin/testbench package:purge-store --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": [
+            "@composer run prepare",
+            "@php vendor/bin/testbench workbench:build --ansi"
+        ],
+        "start": [
+            "Composer\\Config::disableProcessTimeout",
+            "@composer run build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SmartCms\\Options\\OptionServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/DiVotek/smart_cms_store.git"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
